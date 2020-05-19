@@ -1,0 +1,31 @@
+﻿<Project Sdk="Mono.WebAssembly.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+      <TargetFramework>netstandard2.1</TargetFramework>
+      <TargetName>AsyncThreadsEx</TargetName>
+      <TargetNamespace>AsyncThreadsEx</TargetNamespace>
+      <MonoWasmLinkMode>Full</MonoWasmLinkMode>
+      <EnableMonoWasmThreads>true</EnableMonoWasmThreads>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="server.py" />
+    <None Remove="someText.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="server.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="someText.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+      <PackageReference Include="Nito.AsyncEx.Context" Version="5.0.0" />
+      <PackageReference Include="WebAssembly.Bindings" Version="0.2.3" />
+      <PackageReference Include="System.Net.Http.WebAssemblyHttpHandler" Version="0.2.3" />
+      <PackageReference Include="WebAssembly.Net.WebSockets" Version="0.2.3" />
+      <PackageReference Include="System.Drawing.Common" Version="4.7.0" /> 
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "AsyncThreadEx": {
+      "commandName": "Executable",
+      "executablePath": "python",
+      "commandLineArgs": "server.py"
+    }
+  }
+}
