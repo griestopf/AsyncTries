@@ -11,7 +11,7 @@ namespace AsyncOpenTK
     {
         static void Main(string[] args)
         {
-            var win = new GameWindow(GameWindowSettings.Default, NativeWindowSettings.Default);
+            var win = new MyGameWindow(GameWindowSettings.Default, NativeWindowSettings.Default);
 
             win.Run();
         }
