@@ -14,39 +14,10 @@ namespace AsyncOpenTK
         private ConcurrentQueue<Tuple<SendOrPostCallback, object?>> _allCallbacks =
             new ConcurrentQueue<Tuple<SendOrPostCallback, object?>>();
 
-        int _outstandingOperations = 0;
-
-        /// <summary>
-        /// Increments the outstanding asynchronous operation count.
-        /// </summary>
-        public void Started()
-        {
-            _ = Interlocked.Increment(ref _outstandingOperations);
-        }
-
-        /// <summary>
-        /// Decrements the outstanding asynchronous operation count.
-        /// </summary>
-        public void Completed()
-        {
-            var newCount = Interlocked.Decrement(ref _outstandingOperations);
-            //if (newCount == 0)
-            //    _allCallbacks.
-        }
 
         public override void Post(SendOrPostCallback d, object? state)
         {
-            Started();
-            //try
-            //{
             _allCallbacks.Enqueue(Tuple.Create(d, state));
-            //}
-            //catch (InvalidOperationException)
-            //{
-            //    // vexing exception
-            //    return;
-            //}
-
         }
 
         public void ExecutePendingPostAwaits()
@@ -70,7 +41,7 @@ namespace AsyncOpenTK
                 }
             }
 
-            // should always be empty
+            // should always be empty at this point, but nevertheless
             _allCallbacks.Clear();
         }
     }
@@ -124,7 +95,7 @@ namespace AsyncOpenTK
 
     public class FuseeApp
     {
-        protected string res;
+        protected string res = string.Empty;
 
         protected async void LoadAssets()
         {
@@ -230,25 +201,15 @@ namespace AsyncOpenTK
             {
                 if (disposing)
                 {
-                    // TODO: Verwalteten Zustand (verwaltete Objekte) bereinigen
+                    
                 }
-
-                // TODO: Nicht verwaltete Ressourcen (nicht verwaltete Objekte) freigeben und Finalizer überschreiben
-                // TODO: Große Felder auf NULL setzen
+            
                 disposedValue = true;
             }
         }
-
-        // // TODO: Finalizer nur überschreiben, wenn "Dispose(bool disposing)" Code für die Freigabe nicht verwalteter Ressourcen enthält
-        // ~AsyncStream()
-        // {
-        //     // Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(bool disposing)" ein.
-        //     Dispose(disposing: false);
-        // }
-
+     
         public void Dispose()
         {
-            // Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(bool disposing)" ein.
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
