@@ -5,5 +5,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\FuseeApp\FuseeApp.csproj" />
+  </ItemGroup>
 </Project>

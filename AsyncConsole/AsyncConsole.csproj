@@ -9,4 +9,8 @@
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FuseeApp\FuseeApp.csproj" />
+  </ItemGroup>
+
 </Project>

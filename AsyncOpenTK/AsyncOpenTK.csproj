@@ -7,7 +7,12 @@
 
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.0.0-pre9.1" />
+    <PackageReference Include="Nito.AsyncEx" Version="5.0.0" />
     <!--PackageReference Include="OpenTK.GLControl" Version="3.1.0" /-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FuseeApp\FuseeApp.csproj" />
   </ItemGroup>
 
 </Project>
