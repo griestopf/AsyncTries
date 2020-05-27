@@ -1,9 +1,11 @@
 ﻿//using Nito.AsyncEx;
 using System;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using WebAssembly;
+using WebAssembly.Core;
 
 namespace AsyncThreadsEx
 {
@@ -64,12 +66,14 @@ namespace AsyncThreadsEx
             //#endif
             try
             {
-                Console.WriteLine($"Before async, Thread - {Thread.CurrentThread.ManagedThreadId}");
-                var response = await httpClient.GetAsync(id).ConfigureAwait(false);
-                Console.WriteLine($"After async 1, Thread - {Thread.CurrentThread.ManagedThreadId}");
-                response.EnsureSuccessStatusCode();
-                string result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                Console.WriteLine($"After async 2, Thread - {Thread.CurrentThread.ManagedThreadId}");
+          
+                    Console.WriteLine($"Before async, Thread - {Thread.CurrentThread.ManagedThreadId}");
+                    var response = await httpClient.GetAsync(id).ConfigureAwait(false);
+                    Console.WriteLine($"After async 1, Thread - {Thread.CurrentThread.ManagedThreadId}");
+                    response.EnsureSuccessStatusCode();
+                    string result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    Console.WriteLine($"After async 2, Thread - {Thread.CurrentThread.ManagedThreadId}");
+              
 
             }
             catch (Exception exception)
@@ -80,8 +84,18 @@ namespace AsyncThreadsEx
 
         static void Main()
         {
-            LoadAssets();
-            
+            //LoadAssets();
+
+            // non blocking
+            var loader = new FileLoader<ArrayBuffer>("someText.txt");
+            loader.FileLoaded += (_, __) =>
+            {
+                var data = loader.GetData();
+                var converter = new ByteConverter();
+                var res = converter.ConvertTo(data, typeof(string));
+                Console.WriteLine(res);
+            };
+
             /*
             // run something as raw javascript
             Runtime.InvokeJS("alert('Hello from C#');");
@@ -92,9 +106,7 @@ namespace AsyncThreadsEx
             var window = (JSObject)Runtime.GetGlobalObject("Loader");
             window.Invoke("LoadFile", "someText.txt", (Loaded)delegate(string data) { Console.WriteLine(data); }) ;
 
-            // non blocking
-            var loader = new FileLoader<string>("someText.txt");
-            loader.FileLoaded += (_, __) => Console.WriteLine(loader.GetData());
+
 
             RunSomethingAsync();
 
