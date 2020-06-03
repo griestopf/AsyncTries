@@ -93,12 +93,36 @@ namespace AsyncOpenTK
     }
 
 
+
+    // Todo:
+    // - Lösen:
+    //   - LoadAssets wird zum neuen Init
+    //   - AssetStorage lädt über SceneConverter "rekursiv" weitere Assets (fus-Datei Laden -> Konvertieren -> Textur Laden)
+
+    public class SceneRenderer
+    {
+
+    }
+
     public class FuseeApp
     {
         protected string res = string.Empty;
 
+        SceneRenderer? _renderer;
+
+
         protected async void LoadAssets()
         {
+            GL.ClearColor(1, 0, 0, 1);
+
+            string asset = await AssetStorage.GetCompoundAsync("someID");
+
+            // TODO:
+            // root.Add(asset);
+
+            GL.ClearColor(0, 1, 0, 1);
+
+            /*
             GL.ClearColor(1, 0, 0, 1);
 
             Console.WriteLine($"About to load asset. In Thread: {Thread.CurrentThread.ManagedThreadId}");
@@ -120,13 +144,18 @@ namespace AsyncOpenTK
             Console.WriteLine(res);
 
             GL.ClearColor(0, 1, 0, 1);
+            */
         }
 
         public void Init()
         {
+            // TODO: 
+            // Node root;
+            // _renderer = new SceneRenderer(root);
+
+
             // Fire-and-forget call to LoadAssets!!! NO await!!!
             LoadAssets();
-
             // AsyncContext.Run(LoadAssets);
             Console.WriteLine("End Of Init");
         }
@@ -134,6 +163,16 @@ namespace AsyncOpenTK
         public void RenderAFrame()
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            if (AssetStorage.AreAssetsPending)
+            {
+                // TODO:
+                // ShowLoadingScreen();
+                // return;
+            }
+
+            // TODO:
+            // _renderer.Render();
         }
 
         public bool Stop { get; set; }
@@ -145,6 +184,14 @@ namespace AsyncOpenTK
 
     public class AssetStorage
     {
+        public static bool IsAssetPresent(string id)
+        {
+            return false; // TODO: Check if identified asset is not pending
+        }
+
+        public static bool AreAssetsPending => false; // TODO: Check if assets are pending
+
+
         public static async Task<string> GetStringAsync(string id)
         {
             string result;
@@ -153,7 +200,35 @@ namespace AsyncOpenTK
                 result = await stream.GetContentsAsync();
             }
             return result;
+
         }
+
+        public static async Task<string> GetCompoundAsync(string id)
+        {
+            string raw;
+            using (var stream = new AsyncStream(id))
+            {
+                raw = await stream.GetContentsAsync();
+            }
+            string converted = await ConvertAsync(raw);
+            // string converted = await ConvertAsync(result);
+            return converted;
+        }
+
+        public static async Task<string> ConvertAsync(string raw)
+        {
+            string additionalResource = await GetStringAsync("extra");
+            return raw + " " + additionalResource + " converted";
+        }
+
+        /*public async Task<string> ConvertAsync(string raw)
+        {
+            return await Task.Run(async () =>
+            {
+                Thread.Sleep(200);
+                return raw + " asynchronously converted";
+            });
+        }*/
     }
 
     ////////////////////////////////////////////////////////////////////////
